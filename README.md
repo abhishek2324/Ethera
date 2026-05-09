@@ -122,11 +122,9 @@ ETHERA/
 ## Deployment
 
 1. **Database**: Use [MongoDB Atlas](https://www.mongodb.com/atlas) for cloud-hosted MongoDB
-2. **Backend**: Deploy to [Railway](https://railway.app) or [Render](https://render.com)
-3. **Frontend**: Deploy to [Vercel](https://vercel.com) or [Netlify](https://netlify.com)
+2. **Backend**: Deploy to [Railway](https://railway.app) 
+3. **Frontend**: Deploy to  [Railway](https://railway.app) 
 
 Update `MONGO_URI` in production environment variables to point to your Atlas cluster.
 
-## License
 
-MIT
