@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      borderWidth: {
+        '3': '3px',
+      },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },

@@ -1,19 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { authAPI } from '../services/api';
 import { HiOutlineUserGroup, HiOutlineShieldCheck } from 'react-icons/hi';
 
 export default function Team() {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetch = async () => {
-      try { const res = await authAPI.getUsers(); setUsers(res.data.users); }
-      catch (err) { console.error(err); }
-      finally { setLoading(false); }
-    };
-    fetch();
-  }, []);
+  const { data: users = [], isLoading: loading } = useQuery({
+    queryKey: ['team'],
+    queryFn: async () => {
+      const res = await authAPI.getUsers();
+      return res.data.users;
+    },
+  });
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-3 border-primary-500 border-t-transparent rounded-full animate-spin" /></div>;
 

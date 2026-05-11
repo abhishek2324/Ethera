@@ -1,26 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { taskAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { HiOutlinePlus, HiOutlineClipboardList, HiOutlineTrash, HiOutlinePencil } from 'react-icons/hi';
 
 export default function Tasks() {
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
   const { isAdmin } = useAuth();
 
-  const fetchTasks = async () => {
-    try {
+  const { data: tasks = [], isLoading: loading, refetch: fetchTasks } = useQuery({
+    queryKey: ['tasks', statusFilter],
+    queryFn: async () => {
       const params: Record<string, string> = {};
       if (statusFilter) params.status = statusFilter;
       const res = await taskAPI.getAll(params);
-      setTasks(res.data.tasks);
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
-  };
-
-  useEffect(() => { setLoading(true); fetchTasks(); }, [statusFilter]);
+      return res.data.tasks;
+    },
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this task?')) return;

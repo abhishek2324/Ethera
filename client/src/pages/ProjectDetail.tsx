@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useParams, Link } from 'react-router-dom';
 import { projectAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -6,22 +6,19 @@ import { HiOutlineArrowLeft, HiOutlineUserGroup, HiOutlineCalendar } from 'react
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
-  const [project, setProject] = useState<any>(null);
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const { isAdmin } = useAuth();
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const res = await projectAPI.getOne(id!);
-        setProject(res.data.project);
-        setTasks(res.data.tasks);
-      } catch (err) { console.error(err); }
-      finally { setLoading(false); }
-    };
-    fetch();
-  }, [id]);
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ['project', id],
+    queryFn: async () => {
+      const res = await projectAPI.getOne(id!);
+      return res.data;
+    },
+    enabled: !!id,
+  });
+
+  const project = data?.project;
+  const tasks = data?.tasks || [];
 
   const statusColors: Record<string, string> = { Pending: 'text-amber-400 bg-amber-500/10', 'In Progress': 'text-blue-400 bg-blue-500/10', Completed: 'text-emerald-400 bg-emerald-500/10' };
   const priorityColors: Record<string, string> = { High: 'bg-red-500', Medium: 'bg-amber-500', Low: 'bg-emerald-500' };

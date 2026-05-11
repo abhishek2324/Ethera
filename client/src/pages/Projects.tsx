@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { projectAPI, authAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { HiOutlinePlus, HiOutlineTrash, HiOutlinePencil, HiOutlineFolder, HiOutlineX } from 'react-icons/hi';
 
 export default function Projects() {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
@@ -16,15 +16,13 @@ export default function Projects() {
   const [saving, setSaving] = useState(false);
   const { isAdmin } = useAuth();
 
-  const fetchProjects = async () => {
-    try {
+  const { data: projects = [], isLoading: loading, refetch: fetchProjects } = useQuery({
+    queryKey: ['projects'],
+    queryFn: async () => {
       const res = await projectAPI.getAll();
-      setProjects(res.data.projects);
-    } catch (err) { console.error(err); }
-    finally { setLoading(false); }
-  };
-
-  useEffect(() => { fetchProjects(); }, []);
+      return res.data.projects;
+    },
+  });
 
   const openCreate = async () => {
     setEditId(null); setTitle(''); setDescription(''); setMembers([]);

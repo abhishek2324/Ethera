@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { dashboardAPI } from '../services/api';
 import { HiOutlineClipboardList, HiOutlineCheckCircle, HiOutlineClock, HiOutlineExclamation, HiOutlineFolder, HiOutlineUserGroup } from 'react-icons/hi';
 import { useAuth } from '../context/AuthContext';
@@ -17,23 +17,15 @@ interface DashboardData {
 }
 
 export default function Dashboard() {
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
   const { isAdmin } = useAuth();
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const res = await dashboardAPI.get();
-        setData(res.data.dashboard);
-      } catch (err) {
-        console.error('Failed to load dashboard', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDashboard();
-  }, []);
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ['dashboard'],
+    queryFn: async () => {
+      const res = await dashboardAPI.get();
+      return res.data.dashboard as DashboardData;
+    },
+  });
 
   if (loading) {
     return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-3 border-primary-500 border-t-transparent rounded-full animate-spin" /></div>;
