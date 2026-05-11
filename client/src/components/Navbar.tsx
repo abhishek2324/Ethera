@@ -49,7 +49,7 @@ export default function Navbar({ onMenuToggle, title = 'Dashboard' }: NavbarProp
         >
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
             <span className="text-white text-xs font-semibold">
-              {user?.name?.charAt(0).toUpperCase()}
+              {user?.name?.charAt(0)?.toUpperCase()}
             </span>
           </div>
           <div className="hidden sm:block text-left">
