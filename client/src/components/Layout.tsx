@@ -10,9 +10,22 @@ const pageTitles: Record<string, string> = {
   '/team': 'Team Members',
 };
 
+const SIDEBAR_COLLAPSED_KEY = 'ethera_sidebar_collapsed';
+
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === 'true';
+  });
   const location = useLocation();
+
+  const handleToggleCollapse = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(next));
+      return next;
+    });
+  };
 
   const getTitle = () => {
     const path = location.pathname;
@@ -25,9 +38,18 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-surface-950">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        collapsed={collapsed}
+        onToggleCollapse={handleToggleCollapse}
+      />
 
-      <div className="lg:ml-[260px] min-h-screen flex flex-col">
+      <div
+        className={`min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
+          collapsed ? 'lg:ml-[70px]' : 'lg:ml-[260px]'
+        }`}
+      >
         <Navbar onMenuToggle={() => setSidebarOpen(true)} title={getTitle()} />
 
         <main className="flex-1 p-4 lg:p-8">
