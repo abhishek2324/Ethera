@@ -68,7 +68,7 @@ export default function Tasks() {
                 <th className="text-left py-3 px-4 font-medium">Actions</th>
               </tr></thead>
               <tbody>
-                {tasks.map((t) => (
+                {tasks.map((t: any) => (
                   <tr key={t._id} className="border-b border-surface-800/30 hover:bg-surface-800/30 transition-colors">
                     <td className="py-3 px-4 text-surface-200 font-medium">{t.title}</td>
                     <td className="py-3 px-4 text-surface-400">{t.projectId?.title || '—'}</td>

@@ -75,7 +75,7 @@ export default function ProjectDetail() {
                 <th className="text-left py-3 px-4 font-medium">Due</th>
               </tr></thead>
               <tbody>
-                {tasks.map((t) => (
+                {tasks.map((t: any) => (
                   <tr key={t._id} className="border-b border-surface-800/30 hover:bg-surface-800/30 transition-colors">
                     <td className="py-3 px-4"><Link to={`/tasks/edit/${t._id}`} className="text-surface-200 hover:text-primary-400 transition-colors">{t.title}</Link></td>
                     <td className="py-3 px-4 text-surface-400">{t.assignedTo?.name || 'Unassigned'}</td>

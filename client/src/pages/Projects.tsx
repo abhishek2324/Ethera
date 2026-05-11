@@ -76,7 +76,7 @@ export default function Projects() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.map((p) => (
+          {projects.map((p: any) => (
             <Link to={`/projects/${p._id}`} key={p._id} className="bg-surface-900/60 backdrop-blur-xl border border-surface-800/50 rounded-2xl p-6 hover:border-primary-500/30 transition-all group block">
               <div className="flex items-start justify-between mb-3">
                 <div className="w-10 h-10 rounded-xl bg-primary-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
